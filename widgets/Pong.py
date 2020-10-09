@@ -27,6 +27,7 @@ class Pong(Widget):
     def __init__(self, screen_manager=None):
         super(Pong, self).__init__()
         self.screen_manager = screen_manager
+        Window.bind(on_keyboard=self.keyDown)
 
     # Põe a bola em jogo
     def servico(self, vel=(nx, ny), lado=0):    # MATHEUS: aqui a var 'lado' vai servir para reconhecer onde a bola vai iniciar, dependendo de quem fez o último ponto
