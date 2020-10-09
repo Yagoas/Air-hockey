@@ -1,6 +1,11 @@
 from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget
 from kivy.clock import Clock
+from random import randint, choice
+
+num = [-4, 4]           # MATHEUS: essas variáveis vão fazer com que no começo do jogo o disco saia para uma direção aleatória
+nx = choice(num)        # estão nas linhas 31 e 130
+ny = randint(-3, 3)
 
 
 # Definição do
@@ -23,13 +28,21 @@ class Pong(Widget):
         self.screen_manager = screen_manager
 
     # Põe a bola em jogo
-    def servico(self, vel=(4, 0)):
+    def servico(self, vel=(nx, ny), lado=0):    # MATHEUS: aqui a var 'lado' vai servir para reconhecer onde a bola vai iniciar, dependendo de quem fez o último ponto
+        if lado == 1:                           #
+            self.bola.center_x = self.width/4
+            self.bola.center_y = self.height/2
+            self.bola.velocidade = vel
+        elif lado == 2:
+            self.bola.center_x = self.width * 3 / 4
+            self.bola.center_y = self.height / 2
+            self.bola.velocidade = vel
+        else:
+            # Posiciona a bola no centro da tela
+            self.bola.center = self.center
 
-        # Posiciona a bola no centro da tela
-        self.bola.center = self.center
-
-        # Seta a velocidade da bola
-        self.bola.velocidade = vel
+            # Seta a velocidade da bola
+            self.bola.velocidade = vel
 
     # Atualiza nosso jogo
     def atualiza(self, dt):
@@ -43,7 +56,7 @@ class Pong(Widget):
 
         # Verifica se a bola atingiu o topo da janela
         if (self.bola.y < 0) or (self.bola.top > self.height):
-            self.bola.velocidade_y *= -0.8
+            self.bola.velocidade_y *= -1
 
         # Verifica se colidiu com o lado esquerdo da janela para atualizar o
         # placar do jogo
@@ -51,7 +64,7 @@ class Pong(Widget):
             # +1 para o placar da raquete_2
             self.raquete_2.placar += 1
 
-            if self.raquete_2.placar >= 10:
+            if self.raquete_2.placar >= 5:   # MATIAS: aqui que define o número de gols
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
@@ -60,7 +73,11 @@ class Pong(Widget):
                 return
 
             # Reinicia o jogo com a bola saindo pelo lado esquerdo
-            self.servico(vel=(4, 0))
+            self.servico(vel=(-1, 0), lado=1)   # MATIAS: antes tava (4,0) mudei pra (-4,0) que é o certo; lado=true
+            self.raquete_1.center_y = self.center_y  # MATIAS: a partir daqui as raquetes começam no meio
+            self.raquete_2.center_y = self.center_y
+            self.raquete_1.x = self.x
+            self.raquete_2.x = self.width - 70
 
         # Verifica se colidiu com o lado direito da janela para atualizar o
         # placar do jogo
@@ -68,7 +85,7 @@ class Pong(Widget):
             # +1 para o placar da raquete_1
             self.raquete_1.placar += 1
 
-            if self.raquete_1.placar >= 10:
+            if self.raquete_1.placar >= 5:  # MATIAS: aqui que define o número de gols
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
@@ -77,7 +94,11 @@ class Pong(Widget):
                 return
 
             # Reinicia o jogo com a bola saindo pelo lado direito
-            self.servico(vel=(-4, 0))
+            self.servico(vel=(1, 0), lado=2)   # MATIAS: antes tava (-4,0) mudei pra (4,0) que é o certo
+            self.raquete_1.center_y = self.center_y   # MATIAS: a partir daqui as raquetes começam no meio
+            self.raquete_2.center_y = self.center_y
+            self.raquete_1.x = self.x
+            self.raquete_2.x = self.width - 70
 
     # Captura o evento on_touch_move (arrastar de dedo na tela)
     def on_touch_move(self, touch):
@@ -85,11 +106,13 @@ class Pong(Widget):
         if touch.x < self.width / 2:
             # Atualiza altura da raquete esquerda
             self.raquete_1.center_y = touch.y
+            self.raquete_1.center_x = touch.x       # MATIAS: mudei aqui ó
 
         # Verifica se toque foi do lado direito da tela
         if touch.x > self.width - self.width / 2:
             # Atualiza altura da raquete direita
             self.raquete_2.center_y = touch.y
+            self.raquete_2.center_x = touch.x        # MATIAS: mudei aqui ó
 
     def remove_btn(self, btn):
 
@@ -102,11 +125,19 @@ class Pong(Widget):
         self.servico()
 
         # Agendamento da função "atualiza" a cada 1/120 = 0,008s
-        Clock.schedule_interval(self.atualiza, 1.0 / 120.0)
+        Clock.schedule_interval(self.atualiza, 1.0/120.0)
 
     def reinicia_jogo(self):
         # Pôe a bola em jogo
-        self.servico(vel=(4, 0))
+        nx = choice(num)
+        ny = randint(-3, 3)
+
+        self.servico(vel=(nx, ny))
 
         self.raquete_1.placar = 0
         self.raquete_2.placar = 0
+
+        self.raquete_1.center_y = self.center_y  # MATIAS: a partir daqui as raquetes começam no meio
+        self.raquete_2.center_y = self.center_y
+        self.raquete_1.x = self.x
+        self.raquete_2.x = self.width - 70
