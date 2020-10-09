@@ -29,15 +29,15 @@ class Pong(Widget):
 
     # Põe a bola em jogo
     def servico(self, vel=(nx, ny), lado=0):    # MATHEUS: aqui a var 'lado' vai servir para reconhecer onde a bola vai iniciar, dependendo de quem fez o último ponto
-        if lado == 1:                           #
+        if lado == 1:                               # lado = 1, a bola começa no campo do jogador 1
             self.bola.center_x = self.width/4
             self.bola.center_y = self.height/2
             self.bola.velocidade = vel
-        elif lado == 2:
+        elif lado == 2:                             # lado = 2, a bola começa no campo do jogador 2
             self.bola.center_x = self.width * 3 / 4
             self.bola.center_y = self.height / 2
             self.bola.velocidade = vel
-        else:
+        else:                                   # aqui a bola sai para um direção aleatória com velocidade aleatória
             # Posiciona a bola no centro da tela
             self.bola.center = self.center
 
@@ -64,7 +64,7 @@ class Pong(Widget):
             # +1 para o placar da raquete_2
             self.raquete_2.placar += 1
 
-            if self.raquete_2.placar >= 5:   # MATIAS: aqui que define o número de gols
+            if self.raquete_2.placar >= 5:
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
@@ -73,11 +73,11 @@ class Pong(Widget):
                 return
 
             # Reinicia o jogo com a bola saindo pelo lado esquerdo
-            self.servico(vel=(-1, 0), lado=1)   # MATIAS: antes tava (4,0) mudei pra (-4,0) que é o certo; lado=true
-            self.raquete_1.center_y = self.center_y  # MATIAS: a partir daqui as raquetes começam no meio
+            self.servico(vel=(-1, 0), lado=1)          # MATHEUS: antes tava vel=(4,0) mudei pra (-1,0) pra bola sair com uma velocidade menor e pro lado esquerdo
+            self.raquete_1.center_y = self.center_y    # a partir daqui faz as raquetes se posicionarem no centro dnv
             self.raquete_2.center_y = self.center_y
             self.raquete_1.x = self.x
-            self.raquete_2.x = self.width - 70
+            self.raquete_2.x = self.width - 90
 
         # Verifica se colidiu com o lado direito da janela para atualizar o
         # placar do jogo
@@ -85,7 +85,7 @@ class Pong(Widget):
             # +1 para o placar da raquete_1
             self.raquete_1.placar += 1
 
-            if self.raquete_1.placar >= 5:  # MATIAS: aqui que define o número de gols
+            if self.raquete_1.placar >= 5: 
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
@@ -94,11 +94,11 @@ class Pong(Widget):
                 return
 
             # Reinicia o jogo com a bola saindo pelo lado direito
-            self.servico(vel=(1, 0), lado=2)   # MATIAS: antes tava (-4,0) mudei pra (4,0) que é o certo
-            self.raquete_1.center_y = self.center_y   # MATIAS: a partir daqui as raquetes começam no meio
+            self.servico(vel=(1, 0), lado=2)          # MATHEUS: antes tava (-4,0) mudei pra (1,0) pra sair pelo lado direito e com velocidade menor
+            self.raquete_1.center_y = self.center_y   # a partir daqui as raquetes começam no meio
             self.raquete_2.center_y = self.center_y
             self.raquete_1.x = self.x
-            self.raquete_2.x = self.width - 70
+            self.raquete_2.x = self.width - 90
 
     # Captura o evento on_touch_move (arrastar de dedo na tela)
     def on_touch_move(self, touch):
@@ -106,13 +106,13 @@ class Pong(Widget):
         if touch.x < self.width / 2:
             # Atualiza altura da raquete esquerda
             self.raquete_1.center_y = touch.y
-            self.raquete_1.center_x = touch.x       # MATIAS: mudei aqui ó
+            self.raquete_1.center_x = touch.x       # MATHEUS: aqui a raquete pode se movimentar pelo campo
 
         # Verifica se toque foi do lado direito da tela
         if touch.x > self.width - self.width / 2:
             # Atualiza altura da raquete direita
             self.raquete_2.center_y = touch.y
-            self.raquete_2.center_x = touch.x        # MATIAS: mudei aqui ó
+            self.raquete_2.center_x = touch.x
 
     def remove_btn(self, btn):
 
@@ -140,4 +140,4 @@ class Pong(Widget):
         self.raquete_1.center_y = self.center_y  # MATIAS: a partir daqui as raquetes começam no meio
         self.raquete_2.center_y = self.center_y
         self.raquete_1.x = self.x
-        self.raquete_2.x = self.width - 70
+        self.raquete_2.x = self.width - 90
