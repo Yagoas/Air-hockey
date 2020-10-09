@@ -2,6 +2,7 @@ from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from random import randint, choice
+from kivy.core.window import Window
 
 num = [-4, 4]           # MATHEUS: essas variáveis vão fazer com que no começo do jogo o disco saia para uma direção aleatória
 nx = choice(num)        # estão nas linhas 31 e 130
@@ -113,6 +114,33 @@ class Pong(Widget):
             # Atualiza altura da raquete direita
             self.raquete_2.center_y = touch.y
             self.raquete_2.center_x = touch.x
+    
+    # Captura o movimento pelo teclado
+    def keyDown(self, a, b, keycode, *args):
+        # seta para cima
+        if keycode == 26:
+            self.raquete_1.center_y += 10
+        # seta para baixo
+        if keycode == 22:
+            self.raquete_1.center_y -= 10
+        # seta para direita
+        if keycode == 7:
+            self.raquete_1.center_x += 10
+        # seta para esquerda
+        if keycode == 4:
+            self.raquete_1.center_x -= 10
+        # d
+        if keycode == 79:
+            self.raquete_2.center_x += 10
+        # a
+        if keycode == 80:
+            self.raquete_2.center_x -= 10
+        # w
+        if keycode == 82:
+            self.raquete_2.center_y += 10
+        # s
+        if keycode == 81:
+            self.raquete_2.center_y -= 10
 
     def remove_btn(self, btn):
 
