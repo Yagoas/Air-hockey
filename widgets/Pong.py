@@ -43,7 +43,7 @@ class Pong(Widget):
 
         # Verifica se a bola atingiu o topo da janela
         if (self.bola.y < 0) or (self.bola.top > self.height):
-            self.bola.velocidade_y *= -1
+            self.bola.velocidade_y *= -0.8
 
         # Verifica se colidiu com o lado esquerdo da janela para atualizar o
         # placar do jogo
@@ -102,11 +102,11 @@ class Pong(Widget):
         self.servico()
 
         # Agendamento da função "atualiza" a cada 1/120 = 0,008s
-        Clock.schedule_interval(self.atualiza, 1.0/120.0)
+        Clock.schedule_interval(self.atualiza, 1.0 / 120.0)
 
     def reinicia_jogo(self):
         # Pôe a bola em jogo
-        self.servico(vel=(4,0))
+        self.servico(vel=(4, 0))
 
         self.raquete_1.placar = 0
         self.raquete_2.placar = 0
