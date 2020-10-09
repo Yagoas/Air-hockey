@@ -51,7 +51,7 @@ class Pong(Widget):
             # +1 para o placar da raquete_2
             self.raquete_2.placar += 1
 
-            if self.raquete_2.placar >= 1:
+            if self.raquete_2.placar >= 10:
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
@@ -68,7 +68,7 @@ class Pong(Widget):
             # +1 para o placar da raquete_1
             self.raquete_1.placar += 1
 
-            if self.raquete_1.placar >= 1:
+            if self.raquete_1.placar >= 10:
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
