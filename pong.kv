@@ -118,6 +118,8 @@
             root.screen_manager.transition.direction = "right"
             root.screen_manager.current = "menu"
             root.servico(vel=(0, 0))
+	    root.raquete_1.placar = 0  # essa linha e a de baixo fazem o placar zerar
+            root.raquete_2.placar = 0  # antes o placar continuava, mesmo depois de voltar pra tela inicial
 
 <TelaJogo>:
 <TelaVencedor1>:
