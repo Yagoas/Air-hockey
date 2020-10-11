@@ -118,7 +118,7 @@
             root.screen_manager.transition.direction = "right"
             root.screen_manager.current = "menu"
             root.servico(vel=(0, 0))
-	    root.raquete_1.placar = 0  # essa linha e a de baixo fazem o placar zerar
+            root.raquete_1.placar = 0  # essa linha e a de baixo fazem o placar zerar
             root.raquete_2.placar = 0  # antes o placar continuava, mesmo depois de voltar pra tela inicial
 
 <TelaJogo>:
@@ -128,7 +128,7 @@
             source: 'img/vencedor-1.png'
             size: self.width, self.height
 
-    Button:        
+    Button:
         size_hint: 0.166, 0.075
         center_x: root.center_x + self.width
         center_y: root.center_y - 275
@@ -155,7 +155,7 @@
             source: 'img/vencedor-2.png'
             size: self.width, self.height
 
-    Button:        
+    Button:
         size_hint: 0.166, 0.075
         center_x: root.center_x + self.width
         center_y: root.center_y - 275
@@ -163,8 +163,8 @@
         background_down: 'img/menu-btn-pressed.png'
         on_press:
             root.manager.current = "menu"
-            root.manager.transition.direction = "right"       
-        
+            root.manager.transition.direction = "right"
+
 
     Button:
         id: reinicia_jogo_btn
