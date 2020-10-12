@@ -8,7 +8,6 @@ num = [-4, 4]           # MATHEUS: essas variáveis vão fazer com que no começ
 nx = choice(num)        # estão nas linhas 31 e 130
 ny = randint(-3, 3)
 
-
 # Definição do
 class Pong(Widget):
     """
@@ -17,6 +16,8 @@ class Pong(Widget):
     paredes da janela à fim de atualizar o placar do jogo.
     """
 
+
+    tamanho_do_gol=350
     # Referencia o objeto Bola definido no nosso arquivo .kv
     bola = ObjectProperty(None)
 
@@ -60,9 +61,16 @@ class Pong(Widget):
         if (self.bola.y < 0) or (self.bola.top > self.height):
             self.bola.velocidade_y *= -1
 
+        #verifica se a bola atingiu a trave esquerda
+        if self.bola.x < self.x    and  not (self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2):
+            self.bola.velocidade_x *= -1
+
+        #Verifica se a bola atingio a trave direito
+        if self.bola.x> self.width-self.bola.width and  not (self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2):
+            self.bola.velocidade_x *=-1
         # Verifica se colidiu com o lado esquerdo da janela para atualizar o
         # placar do jogo
-        if self.bola.x < self.x:
+        if self.bola.x < self.x and self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2:
             # +1 para o placar da raquete_2
             self.raquete_2.placar += 1
 
@@ -83,11 +91,11 @@ class Pong(Widget):
 
         # Verifica se colidiu com o lado direito da janela para atualizar o
         # placar do jogo
-        if self.bola.x > self.width:
+        if self.bola.x > self.width and self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2:
             # +1 para o placar da raquete_1
             self.raquete_1.placar += 1
 
-            if self.raquete_1.placar >= 5: 
+            if self.raquete_1.placar >= 5:
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
@@ -115,7 +123,7 @@ class Pong(Widget):
             # Atualiza altura da raquete direita
             self.raquete_2.center_y = touch.y
             self.raquete_2.center_x = touch.x
-    
+
     # Captura o movimento pelo teclado
     def keyDown(self, a, b, keycode, *args):
         # seta para cima
