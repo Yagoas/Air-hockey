@@ -1,6 +1,7 @@
 from kivy.properties import NumericProperty
 from kivy.uix.widget import Widget
 from kivy.vector import Vector
+from kivy.core.audio import SoundLoader
 
 # Define o elemento "raquete"
 class Raquete(Widget):
@@ -15,8 +16,14 @@ class Raquete(Widget):
     # Define a colisão da raquete com a bola
     def rebate_bola(self, bola):
 
+        # Carrega o som da colisão do disco com a raquete
+        sound_disco_raquete = SoundLoader.load("audio/sfx-disco_raquete.mp3")
+
         # Verifica se houve a colisão do widget "raquete" com o widget "bola"
         if self.collide_widget(bola):
+
+            # Toca o áudio da colisão disco - raquete
+            sound_disco_raquete.play()
 
             # Pega a tupla da velocidade da bola (velocidade_x e velocidade_y)
             vx, vy = bola.velocidade
@@ -27,8 +34,8 @@ class Raquete(Widget):
             # Inverte a velocidade da bola
             inv_vel = Vector(-1 * vx, vy)
 
-            # Verifica a velocidade e define se aumenta ou diminui a velocidade da bola
-            if abs(vx + vy) <= 15:
+            # Verifica a velocidade e define se aumenta ou conserva a velocidade da bola
+            if abs(vx + vy) <= 12:
                 vel = inv_vel * 1.3
             else:
                 vel = inv_vel
