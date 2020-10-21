@@ -82,7 +82,6 @@ class Pong(Widget):
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
-                
                 # Aqui as raquetes voltam pra frente do gol
                 self.raquete_1.center_y = self.center_y
                 self.raquete_2.center_y = self.center_y
