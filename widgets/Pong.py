@@ -32,7 +32,7 @@ class Pong(Widget):
         # Window.bind(on_keyboard=self.keyDown)
 
     # Põe a bola em jogo
-    def servico(self, vel=(nx, ny), lado=0):  # MATHEUS: aqui a var 'lado' vai servir para reconhecer onde a bola vai iniciar, dependendo de quem fez o último ponto
+    def servico(self, vel=(nx, ny), lado=0):  # aqui a var 'lado' vai servir para reconhecer onde a bola vai iniciar, dependendo de quem fez o último ponto
         if lado == 1:  # lado = 1, a bola começa no campo do jogador 1
             self.bola.center_x = self.width / 4
             self.bola.center_y = self.height / 2
@@ -41,7 +41,7 @@ class Pong(Widget):
             self.bola.center_x = self.width * 3 / 4
             self.bola.center_y = self.height / 2
             self.bola.velocidade = vel
-        else:  # aqui a bola sai para um direção aleatória com velocidade aleatória
+        else:
             # Posiciona a bola no centro da tela
             self.bola.center = self.center
 
@@ -82,13 +82,19 @@ class Pong(Widget):
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
+                
+                # Aqui as raquetes voltam pra frente do gol
+                self.raquete_1.center_y = self.center_y
+                self.raquete_2.center_y = self.center_y
+                self.raquete_1.x = self.x
+                self.raquete_2.x = self.width - 90
                 self.screen_manager.current = "vencedor_2"
 
                 return
 
             # Reinicia o jogo com a bola saindo pelo lado esquerdo
-            self.servico(vel=(-1, 0), lado=1)  # MATHEUS: antes tava vel=(4,0) mudei pra (-1,0) pra bola sair com uma velocidade menor e pro lado esquerdo
-            self.raquete_1.center_y = self.center_y  # a partir daqui faz as raquetes se posicionarem no centro dnv
+            self.servico(vel=(-1, 0), lado=1)  # original tava vel=(4,0) mudei pra (-1,0), fazendo sair pelo lado certo e reduzindo a velocidade
+            self.raquete_1.center_y = self.center_y  # A partir daqui as raquetes se posicionarem na frente do gol de novo
             self.raquete_2.center_y = self.center_y
             self.raquete_1.x = self.x
             self.raquete_2.x = self.width - 90
@@ -106,13 +112,18 @@ class Pong(Widget):
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
+                # Aqui as raquetes voltam pra frente do gol
+                self.raquete_1.center_y = self.center_y
+                self.raquete_2.center_y = self.center_y
+                self.raquete_1.x = self.x
+                self.raquete_2.x = self.width - 90
                 self.screen_manager.current = "vencedor_1"
 
                 return
 
             # Reinicia o jogo com a bola saindo pelo lado direito
-            self.servico(vel=(1, 0), lado=2)  # MATHEUS: antes tava (-4,0) mudei pra (1,0) pra sair pelo lado direito e com velocidade menor
-            self.raquete_1.center_y = self.center_y # a partir daqui as raquetes começam no meio
+            self.servico(vel=(1, 0), lado=2)  # original tava (-4,0) mudei pra (1,0), fazendo sair pelo lado certo e reduzindo a velocidade
+            self.raquete_1.center_y = self.center_y  # raquetes ficam na frente do gol
             self.raquete_2.center_y = self.center_y
             self.raquete_1.x = self.x
             self.raquete_2.x = self.width - 90
@@ -121,15 +132,19 @@ class Pong(Widget):
     def on_touch_move(self, touch):
         # Verifica se toque foi do lado esquerdo da tela
         if touch.x < self.width / 2:
-            # Atualiza altura da raquete esquerda
-            self.raquete_1.center_y = touch.y
-            self.raquete_1.center_x = touch.x  # MATHEUS: aqui a raquete pode se movimentar pelo campo
+            # impede que a raquete passe os limites superior e inferior
+            if touch.y - 90.0/2.0 > 0 and touch.y + 90.0/2.0 < self.height:
+                # Atualiza a posição da raquete esquerda
+                self.raquete_1.center_y = touch.y
+                self.raquete_1.center_x = touch.x
 
         # Verifica se toque foi do lado direito da tela
         if touch.x > self.width - self.width / 2:
-            # Atualiza altura da raquete direita
-            self.raquete_2.center_y = touch.y
-            self.raquete_2.center_x = touch.x
+            # impede que a raquete passe os limites superior e inferior
+            if touch.y - 90.0/2.0 > 0 and touch.y + 90.0/2.0 < self.height:
+                # Atualiza a posição da raquete direita
+                self.raquete_2.center_y = touch.y
+                self.raquete_2.center_x = touch.x
 
     # Captura o movimento pelo teclado
     def keyDown(self, a, b, keycode, *args):
@@ -167,7 +182,13 @@ class Pong(Widget):
 
         # Pôe a bola em jogo
         self.servico()
-
+        
+        #Posiciona as raquetes na frente do gol
+        self.raquete_1.center_y = self.center_y
+        self.raquete_2.center_y = self.center_y
+        self.raquete_1.x = self.x
+        self.raquete_2.x = self.width - 90
+        
         # Agendamento da função "atualiza" a cada 1/120 = 0,008s
         Clock.schedule_interval(self.atualiza, 1.0 / 120.0)
 
@@ -181,7 +202,7 @@ class Pong(Widget):
         self.raquete_1.placar = 0
         self.raquete_2.placar = 0
 
-        self.raquete_1.center_y = self.center_y # MATIAS: a partir daqui as raquetes começam no meio
+        self.raquete_1.center_y = self.center_y
         self.raquete_2.center_y = self.center_y
         self.raquete_1.x = self.x
         self.raquete_2.x = self.width - 90
