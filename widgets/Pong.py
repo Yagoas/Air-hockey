@@ -18,6 +18,8 @@ class Pong(Widget):
     bolinha). Nele também está a lógica de colisão da bolinha com as
     paredes da janela à fim de atualizar o placar do jogo.
     """
+    #variavel que defene o tamanho do gol
+    tamanho_do_gol = 300
 
     # Referencia o objeto Bola definido no nosso arquivo .kv
     bola = ObjectProperty(None)
@@ -69,9 +71,20 @@ class Pong(Widget):
             # Reduz a velocidade da bola caso colida com a parede
             self.bola.velocidade_y *= -0.8
 
-        # Verifica se colidiu com o lado esquerdo da janela para atualizar o
+        #Verifica se a bola atingiu a trave esquerda
+        if self.bola.x < self.x    and \
+            not self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2:
+            self.bola.velocidade_x *= -1
+
+        #Verifica se a bola atingiu a trave direito
+        if self.bola.x> self.width-self.bola.width and \
+                not self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2:
+            self.bola.velocidade_x *=-1
+
+        # Verifica se colidiu com o gol esquerdo  para atualizar o
         # placar do jogo
-        if self.bola.x < self.x:
+        if self.bola.x < self.x and \
+                self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2:
             # +1 para o placar da raquete_2
             self.raquete_2.placar += 1
 
@@ -98,9 +111,10 @@ class Pong(Widget):
             self.raquete_1.x = self.x
             self.raquete_2.x = self.width - 90
 
-        # Verifica se colidiu com o lado direito da janela para atualizar o
+        # Verifica se colidiu com o gol direito para atualizar o
         # placar do jogo
-        if self.bola.x > self.width:
+        if self.bola.x > self.width and \
+                self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2:
             # +1 para o placar da raquete_1
             self.raquete_1.placar += 1
 
@@ -181,13 +195,13 @@ class Pong(Widget):
 
         # Pôe a bola em jogo
         self.servico()
-        
+
         #Posiciona as raquetes na frente do gol
         self.raquete_1.center_y = self.center_y
         self.raquete_2.center_y = self.center_y
         self.raquete_1.x = self.x
         self.raquete_2.x = self.width - 90
-        
+
         # Agendamento da função "atualiza" a cada 1/120 = 0,008s
         Clock.schedule_interval(self.atualiza, 1.0 / 120.0)
 
