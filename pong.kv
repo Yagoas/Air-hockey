@@ -45,54 +45,44 @@
             source: 'img/campo.png'
             size: self.width, self.height
 
-    Label:
-        font_size: 16
-        center_x: root.width/4
-        top: root.top + 20
-        text: "Jogador 1"
-        color: (0,0,0,1)
-
-    Label:
-        font_size: 16
-        center_x: root.width * 3/4
-        top: root.top + 20
-        text: "Jogador 2"
-        color: (0,0,0,1)
+    # removi os Labels do nome do jogador
 
     Label:
         font_size: 50
         center_x: root.width/4
-        top: root.top - 20
+        top: root.top + 12
         text: str(root.raquete_1.placar)
-        color: (0,0,0,1)
+        color: (1,1,1,1)	# deixa na cor branca
 
     Label:
         font_size: 50
         center_x: root.width * 3/4
-        top: root.top - 20
+        top: root.top + 12
         text: str(root.raquete_2.placar)
-        color: (0,0,0,1)
+        color: (1,1,1,1)
 
     Bola:
         id: bola
-        center: self.parent.center
+        center_y: root.center_y + 25  # nova posição para o novo campo; o mesmo para as raquetes
+	center_x: root.center_x
 
     Raquete:
         id: raquete_esquerda
         x: root.x
         source: 'img/raquete_1.png'
-        center_y: root.center_y
+        center_y: root.center_y + 25
 
     Raquete:
         id: raquete_direita
         x: root.width-self.width
-        center_y: root.center_y
+        center_y: root.center_y + 25
 
     Button:
         id: inicia_jogo_btn
-        size: 200, 60
-		background_normal: 'img/iniciar-jogo-btn-normal.png'
-		background_down: 'img/iniciar-jogo-btn-pressed.png'
+        size: 180, 45
+	pos: root.width/6, 6 
+	background_normal: 'img/iniciar-jogo-btn-normal.png'
+	background_down: 'img/iniciar-jogo-btn-pressed.png'
         center_x: root.width/6
         on_release:
             root.remove_btn(self)
@@ -102,7 +92,8 @@
 
     Button:
         id: reinicia_jogo_btn
-        size: 200, 60
+        size: 180, 45
+	pos: 3 * root.width/6, 6
     	background_normal: 'img/reiniciar-btn-normal.png'
         background_down: 'img/reiniciar-btn-pressed.png'
         center_x: 3 * root.width/6
@@ -111,7 +102,8 @@
 
     Button:
         id: menu_btn
-        size: 200, 60
+        size: 180, 45
+	pos: 5 * root.width/6, 6
     	background_normal: 'img/menu-btn-normal.png'
         background_down: 'img/menu-btn-pressed.png'
         center_x: 5 * root.width/6
@@ -171,7 +163,7 @@
         size_hint: 0.166, 0.075
     	center_x: root.center_x - self.width
         center_y: root.center_y - 275
-	    background_normal: 'img/reiniciar-btn-normal.png'
+	background_normal: 'img/reiniciar-btn-normal.png'
         background_down: 'img/reiniciar-btn-pressed.png'
         on_press:
             root.manager.transition.direction = 'left'
