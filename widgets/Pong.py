@@ -6,9 +6,9 @@ from kivy.core.audio import SoundLoader
 # from kivy.core.window import Window
 
 
-num = [-4, 4,]  # MATHEUS: essas variáveis vão fazer com que no começo do jogo o disco saia para uma direção aleatória
-nx = choice(num)  # estão nas linhas 31 e 130
-ny = randint(-3, 3)
+num = [-4, 4,]          # essas variáveis vão fazer com que no começo do jogo o disco saia para uma direção aleatória
+nx = choice(num)        # essa determina a direção e a velocidade da bola
+ny = randint(-3, 3)     # essa determina a inclinação
 
 
 # Definição do
@@ -18,8 +18,8 @@ class Pong(Widget):
     bolinha). Nele também está a lógica de colisão da bolinha com as
     paredes da janela à fim de atualizar o placar do jogo.
     """
-    #variavel que defene o tamanho do gol
-    tamanho_do_gol = 300
+    # Variavel que define o tamanho do gol
+    tamanho_do_gol = 220  # diminuí um pouco o tamanho do gol pq ainda estava um pouco fora de lugar
 
     # Referencia o objeto Bola definido no nosso arquivo .kv
     bola = ObjectProperty(None)
@@ -36,16 +36,17 @@ class Pong(Widget):
     # Põe a bola em jogo
     def servico(self, vel=(nx, ny), lado=0):  # aqui a var 'lado' vai servir para reconhecer onde a bola vai iniciar, dependendo de quem fez o último ponto
         if lado == 1:  # lado = 1, a bola começa no campo do jogador 1
-            self.bola.center_x = self.width / 4
-            self.bola.center_y = self.height / 2
+            self.bola.center_x = self.width / 4 + 25
+            self.bola.center_y = self.height / 2 + 25
             self.bola.velocidade = vel
         elif lado == 2:  # lado = 2, a bola começa no campo do jogador 2
-            self.bola.center_x = self.width * 3 / 4
-            self.bola.center_y = self.height / 2
+            self.bola.center_x = self.width * 3 / 4 + 25
+            self.bola.center_y = self.height / 2 + 25
             self.bola.velocidade = vel
         else:
             # Posiciona a bola no centro da tela
-            self.bola.center = self.center
+            self.bola.center_y = self.center_y + 25
+            self.bola.center_x = self.center_x
 
             # Seta a velocidade da bola
             self.bola.velocidade = vel
@@ -62,8 +63,8 @@ class Pong(Widget):
         self.raquete_1.rebate_bola(self.bola)
         self.raquete_2.rebate_bola(self.bola)
 
-        # Verifica se a bola atingiu o topo da janela
-        if (self.bola.y < 0) or (self.bola.top > self.height):
+        # Verifica se a bola atingiu a parte de baixo ou de cima do campo
+        if (self.bola.y < 60) or (self.bola.top > self.height):
 
             # Toca o áudio da colisão disco - parede
             sound_disco_parede.play()
@@ -71,20 +72,20 @@ class Pong(Widget):
             # Reduz a velocidade da bola caso colida com a parede
             self.bola.velocidade_y *= -0.8
 
-        #Verifica se a bola atingiu a trave esquerda
-        if self.bola.x < self.x    and \
-            not self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2:
+        # Verifica se a bola atingiu as traves no lado esquerdo
+        if self.bola.x < self.x and \
+            not self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
             self.bola.velocidade_x *= -1
 
-        #Verifica se a bola atingiu a trave direito
-        if self.bola.x> self.width-self.bola.width and \
-                not self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2:
+        # Verifica se a bola atingiu as traves no lado direito
+        if self.bola.x> self.width-self.bola.width and not \
+                self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
             self.bola.velocidade_x *=-1
 
         # Verifica se colidiu com o gol esquerdo  para atualizar o
         # placar do jogo
         if self.bola.x < self.x and \
-                self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2:
+                self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
             # +1 para o placar da raquete_2
             self.raquete_2.placar += 1
 
@@ -96,8 +97,8 @@ class Pong(Widget):
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
                 # Aqui as raquetes voltam pra frente do gol
-                self.raquete_1.center_y = self.center_y
-                self.raquete_2.center_y = self.center_y
+                self.raquete_1.center_y = self.center_y + 25   # o '+25' é por causa do novo tamanho do campo
+                self.raquete_2.center_y = self.center_y + 25
                 self.raquete_1.x = self.x
                 self.raquete_2.x = self.width - 90
                 self.screen_manager.current = "vencedor_2"
@@ -106,15 +107,15 @@ class Pong(Widget):
 
             # Reinicia o jogo com a bola saindo pelo lado esquerdo
             self.servico(vel=(-1, 0), lado=1)  # original tava vel=(4,0) mudei pra (-1,0), fazendo sair pelo lado certo e reduzindo a velocidade
-            self.raquete_1.center_y = self.center_y  # A partir daqui as raquetes se posicionarem na frente do gol de novo
-            self.raquete_2.center_y = self.center_y
+            self.raquete_1.center_y = self.center_y + 25  # A partir daqui as raquetes se posicionarem na frente do gol de novo
+            self.raquete_2.center_y = self.center_y + 25
             self.raquete_1.x = self.x
             self.raquete_2.x = self.width - 90
 
         # Verifica se colidiu com o gol direito para atualizar o
         # placar do jogo
         if self.bola.x > self.width and \
-                self.tamanho_do_gol<self.bola.y<(self.height+self.tamanho_do_gol)/2:
+                self.tamanho_do_gol < self.bola.y < (self.height+self.tamanho_do_gol)/2:
             # +1 para o placar da raquete_1
             self.raquete_1.placar += 1
 
@@ -126,8 +127,8 @@ class Pong(Widget):
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
                 # Aqui as raquetes voltam pra frente do gol
-                self.raquete_1.center_y = self.center_y
-                self.raquete_2.center_y = self.center_y
+                self.raquete_1.center_y = self.center_y + 25
+                self.raquete_2.center_y = self.center_y + 25
                 self.raquete_1.x = self.x
                 self.raquete_2.x = self.width - 90
                 self.screen_manager.current = "vencedor_1"
@@ -136,8 +137,8 @@ class Pong(Widget):
 
             # Reinicia o jogo com a bola saindo pelo lado direito
             self.servico(vel=(1, 0), lado=2)  # original tava (-4,0) mudei pra (1,0), fazendo sair pelo lado certo e reduzindo a velocidade
-            self.raquete_1.center_y = self.center_y  # raquetes ficam na frente do gol
-            self.raquete_2.center_y = self.center_y
+            self.raquete_1.center_y = self.center_y + 25  # raquetes ficam na frente do gol
+            self.raquete_2.center_y = self.center_y + 25
             self.raquete_1.x = self.x
             self.raquete_2.x = self.width - 90
 
@@ -146,7 +147,7 @@ class Pong(Widget):
         # Verifica se toque foi do lado esquerdo da tela
         if touch.x < self.width / 2:
             # impede que a raquete passe os limites superior e inferior
-            if touch.y - 90.0/2.0 > 0 and touch.y + 90.0/2.0 < self.height:
+            if touch.y - 90.0/2.0 > 60 and touch.y + 90.0/2.0 < self.height:
                 # Atualiza a posição da raquete esquerda
                 self.raquete_1.center_y = touch.y
                 self.raquete_1.center_x = touch.x
@@ -154,7 +155,7 @@ class Pong(Widget):
         # Verifica se toque foi do lado direito da tela
         if touch.x > self.width - self.width / 2:
             # impede que a raquete passe os limites superior e inferior
-            if touch.y - 90.0/2.0 > 0 and touch.y + 90.0/2.0 < self.height:
+            if touch.y - 90.0/2.0 > 60 and touch.y + 90.0/2.0 < self.height:
                 # Atualiza a posição da raquete direita
                 self.raquete_2.center_y = touch.y
                 self.raquete_2.center_x = touch.x
@@ -197,8 +198,8 @@ class Pong(Widget):
         self.servico()
 
         #Posiciona as raquetes na frente do gol
-        self.raquete_1.center_y = self.center_y
-        self.raquete_2.center_y = self.center_y
+        self.raquete_1.center_y = self.center_y + 25
+        self.raquete_2.center_y = self.center_y + 25
         self.raquete_1.x = self.x
         self.raquete_2.x = self.width - 90
 
@@ -215,7 +216,7 @@ class Pong(Widget):
         self.raquete_1.placar = 0
         self.raquete_2.placar = 0
 
-        self.raquete_1.center_y = self.center_y
-        self.raquete_2.center_y = self.center_y
+        self.raquete_1.center_y = self.center_y + 25
+        self.raquete_2.center_y = self.center_y + 25
         self.raquete_1.x = self.x
         self.raquete_2.x = self.width - 90
