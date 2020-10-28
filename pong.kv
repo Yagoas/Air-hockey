@@ -64,7 +64,7 @@
     Bola:
         id: bola
         center_y: root.center_y + 25  # nova posição para o novo campo; o mesmo para as raquetes
-	center_x: root.center_x
+		center_x: root.center_x
 
     Raquete:
         id: raquete_esquerda
@@ -80,9 +80,9 @@
     Button:
         id: inicia_jogo_btn
         size: 180, 45
-	pos: root.width/6, 6 
-	background_normal: 'img/iniciar-jogo-btn-normal.png'
-	background_down: 'img/iniciar-jogo-btn-pressed.png'
+		pos: root.width/6, 6 
+		background_normal: 'img/iniciar-jogo-btn-normal.png'
+		background_down: 'img/iniciar-jogo-btn-pressed.png'
         center_x: root.width/6
         on_release:
             root.remove_btn(self)
@@ -93,7 +93,7 @@
     Button:
         id: reinicia_jogo_btn
         size: 180, 45
-	pos: 3 * root.width/6, 6
+		pos: 3 * root.width/6, 6
     	background_normal: 'img/reiniciar-btn-normal.png'
         background_down: 'img/reiniciar-btn-pressed.png'
         center_x: 3 * root.width/6
@@ -103,7 +103,7 @@
     Button:
         id: menu_btn
         size: 180, 45
-	pos: 5 * root.width/6, 6
+		pos: 5 * root.width/6, 6
     	background_normal: 'img/menu-btn-normal.png'
         background_down: 'img/menu-btn-pressed.png'
         center_x: 5 * root.width/6
@@ -136,7 +136,7 @@
         size_hint: 0.166, 0.075
     	center_x: root.center_x - self.width
         center_y: root.center_y - 275
-    	background_normal: 'img/reiniciar-btn-normal.png'
+    		background_normal: 'img/reiniciar-btn-normal.png'
         background_down: 'img/reiniciar-btn-pressed.png'
         on_press:
             root.manager.transition.direction = 'left'
@@ -163,7 +163,7 @@
         size_hint: 0.166, 0.075
     	center_x: root.center_x - self.width
         center_y: root.center_y - 275
-	background_normal: 'img/reiniciar-btn-normal.png'
+		background_normal: 'img/reiniciar-btn-normal.png'
         background_down: 'img/reiniciar-btn-pressed.png'
         on_press:
             root.manager.transition.direction = 'left'
