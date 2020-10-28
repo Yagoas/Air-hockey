@@ -55,6 +55,7 @@ class Pong(Widget):
     def atualiza(self, dt):
         sound_gol = SoundLoader.load("audio/sfx-gol.mp3")
         sound_disco_parede = SoundLoader.load("audio/sfx-disco_parade.mp3")
+        sound_vitoria = SoundLoader.load("audio/sfx-vitoria.mp3")
 
         # Faz a bola se mover
         self.bola.movimenta()
@@ -104,6 +105,7 @@ class Pong(Widget):
                 self.raquete_1.x = self.x
                 self.raquete_2.x = self.width - 90
                 self.screen_manager.current = "vencedor_2"
+                sound_vitoria.play()
 
                 return
 
@@ -134,6 +136,7 @@ class Pong(Widget):
                 self.raquete_1.x = self.x
                 self.raquete_2.x = self.width - 90
                 self.screen_manager.current = "vencedor_1"
+                sound_vitoria.play()
 
                 return
 
