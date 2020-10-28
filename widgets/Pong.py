@@ -70,7 +70,7 @@ class Pong(Widget):
             sound_disco_parede.play()
 
             # Reduz a velocidade da bola caso colida com a parede
-            self.bola.velocidade_y *= -0.8
+            self.bola.velocidade_y *= -1
 
         # Verifica se a bola atingiu as traves no lado esquerdo
         if self.bola.x < self.x and \

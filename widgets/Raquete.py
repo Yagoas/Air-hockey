@@ -35,8 +35,8 @@ class Raquete(Widget):
             inv_vel = Vector(-1 * vx, vy)
 
             # Verifica a velocidade e define se aumenta ou conserva a velocidade da bola
-            if abs(vx + vy) <= 12:
-                vel = inv_vel * 1.3
+            if abs(vx + vy) <= 10:
+                vel = inv_vel * 1.2
             else:
                 vel = inv_vel
 
