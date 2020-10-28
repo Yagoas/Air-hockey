@@ -76,11 +76,13 @@ class Pong(Widget):
         if self.bola.x < self.x and \
             not self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
             self.bola.velocidade_x *= -1
+            sound_disco_parede.play()
 
         # Verifica se a bola atingiu as traves no lado direito
         if self.bola.x> self.width-self.bola.width and not \
                 self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
             self.bola.velocidade_x *=-1
+            sound_disco_parede.play()
 
         # Verifica se colidiu com o gol esquerdo  para atualizar o
         # placar do jogo
