@@ -6,7 +6,8 @@ from kivy.core.audio import SoundLoader
 # from kivy.core.window import Window
 
 
-num = [-4, 4,]          # essas variáveis vão fazer com que no começo do jogo o disco saia para uma direção aleatória
+# essas variáveis vão fazer com que no começo do jogo o disco saia para uma direção aleatória
+num = [-4, 4, ]
 nx = choice(num)        # essa determina a direção e a velocidade da bola
 ny = randint(-3, 3)     # essa determina a inclinação
 
@@ -19,7 +20,8 @@ class Pong(Widget):
     paredes da janela à fim de atualizar o placar do jogo.
     """
     # Variavel que define o tamanho do gol
-    tamanho_do_gol = 220  # diminuí um pouco o tamanho do gol pq ainda estava um pouco fora de lugar
+    # diminuí um pouco o tamanho do gol pq ainda estava um pouco fora de lugar
+    tamanho_do_gol = 220
 
     # Referencia o objeto Bola definido no nosso arquivo .kv
     bola = ObjectProperty(None)
@@ -34,7 +36,8 @@ class Pong(Widget):
         # Window.bind(on_keyboard=self.keyDown)
 
     # Põe a bola em jogo
-    def servico(self, vel=(nx, ny), lado=0):  # aqui a var 'lado' vai servir para reconhecer onde a bola vai iniciar, dependendo de quem fez o último ponto
+    # aqui a var 'lado' vai servir para reconhecer onde a bola vai iniciar, dependendo de quem fez o último ponto
+    def servico(self, vel=(nx, ny), lado=0):
         if lado == 1:  # lado = 1, a bola começa no campo do jogador 1
             self.bola.center_x = self.width / 4 + 25
             self.bola.center_y = self.height / 2 + 25
@@ -68,22 +71,25 @@ class Pong(Widget):
         if (self.bola.y < 60) or (self.bola.top > self.height):
 
             # Toca o áudio da colisão disco - parede
-            sound_disco_parede.play()
+            if sound_disco_parede:
+                sound_disco_parede.play()
 
             # Reduz a velocidade da bola caso colida com a parede
             self.bola.velocidade_y *= -1
 
         # Verifica se a bola atingiu as traves no lado esquerdo
         if self.bola.x < self.x and \
-            not self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
+                not self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
             self.bola.velocidade_x *= -1
-            sound_disco_parede.play()
+            if sound_disco_parede:
+                sound_disco_parede.play()
 
         # Verifica se a bola atingiu as traves no lado direito
-        if self.bola.x> self.width-self.bola.width and not \
+        if self.bola.x > self.width-self.bola.width and not \
                 self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
-            self.bola.velocidade_x *=-1
-            sound_disco_parede.play()
+            self.bola.velocidade_x *= -1
+            if sound_disco_parede:
+                sound_disco_parede.play()
 
         # Verifica se colidiu com o gol esquerdo  para atualizar o
         # placar do jogo
@@ -93,25 +99,30 @@ class Pong(Widget):
             self.raquete_2.placar += 1
 
             # Toca o áudio do gol
-            sound_gol.play()
+            if sound_gol:
+                sound_gol.play()
 
             if self.raquete_2.placar >= 5:
                 self.servico(vel=(0, 0))
                 self.raquete_1.placar = 0
                 self.raquete_2.placar = 0
                 # Aqui as raquetes voltam pra frente do gol
-                self.raquete_1.center_y = self.center_y + 25   # o '+25' é por causa do novo tamanho do campo
+                # o '+25' é por causa do novo tamanho do campo
+                self.raquete_1.center_y = self.center_y + 25
                 self.raquete_2.center_y = self.center_y + 25
                 self.raquete_1.x = self.x
                 self.raquete_2.x = self.width - 90
                 self.screen_manager.current = "vencedor_2"
-                sound_vitoria.play()
+                if sound_vitoria:
+                    sound_vitoria.play()
 
                 return
 
             # Reinicia o jogo com a bola saindo pelo lado esquerdo
-            self.servico(vel=(-1, 0), lado=1)  # original tava vel=(4,0) mudei pra (-1,0), fazendo sair pelo lado certo e reduzindo a velocidade
-            self.raquete_1.center_y = self.center_y + 25  # A partir daqui as raquetes se posicionarem na frente do gol de novo
+            # original tava vel=(4,0) mudei pra (-1,0), fazendo sair pelo lado certo e reduzindo a velocidade
+            self.servico(vel=(-1, 0), lado=1)
+            # A partir daqui as raquetes se posicionarem na frente do gol de novo
+            self.raquete_1.center_y = self.center_y + 25
             self.raquete_2.center_y = self.center_y + 25
             self.raquete_1.x = self.x
             self.raquete_2.x = self.width - 90
@@ -124,7 +135,8 @@ class Pong(Widget):
             self.raquete_1.placar += 1
 
             # Toca o áudio do gol
-            sound_gol.play()
+            if sound_gol:
+                sound_gol.play()
 
             if self.raquete_1.placar >= 5:
                 self.servico(vel=(0, 0))
@@ -136,12 +148,14 @@ class Pong(Widget):
                 self.raquete_1.x = self.x
                 self.raquete_2.x = self.width - 90
                 self.screen_manager.current = "vencedor_1"
-                sound_vitoria.play()
+                if sound_vitoria:
+                    sound_vitoria.play()
 
                 return
 
             # Reinicia o jogo com a bola saindo pelo lado direito
-            self.servico(vel=(1, 0), lado=2)  # original tava (-4,0) mudei pra (1,0), fazendo sair pelo lado certo e reduzindo a velocidade
+            # original tava (-4,0) mudei pra (1,0), fazendo sair pelo lado certo e reduzindo a velocidade
+            self.servico(vel=(1, 0), lado=2)
             self.raquete_1.center_y = self.center_y + 25  # raquetes ficam na frente do gol
             self.raquete_2.center_y = self.center_y + 25
             self.raquete_1.x = self.x
@@ -202,7 +216,7 @@ class Pong(Widget):
         # Pôe a bola em jogo
         self.servico()
 
-        #Posiciona as raquetes na frente do gol
+        # Posiciona as raquetes na frente do gol
         self.raquete_1.center_y = self.center_y + 25
         self.raquete_2.center_y = self.center_y + 25
         self.raquete_1.x = self.x

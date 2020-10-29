@@ -4,6 +4,8 @@ from kivy.vector import Vector
 from kivy.core.audio import SoundLoader
 
 # Define o elemento "raquete"
+
+
 class Raquete(Widget):
     """
     Define a raquete do nosso jogo. Também faz a verificação de colisão
@@ -23,13 +25,15 @@ class Raquete(Widget):
         if self.collide_widget(bola):
 
             # Toca o áudio da colisão disco - raquete
-            sound_disco_raquete.play()
+            if sound_disco_raquete:
+                sound_disco_raquete.play()
 
             # Pega a tupla da velocidade da bola (velocidade_x e velocidade_y)
             vx, vy = bola.velocidade
 
             # Verifica se a bola bateu na parte de cima ou de baixo da raquete
-            offset_raquete = (bola.center_y - self.center_y) / (self.height / 2)
+            offset_raquete = (bola.center_y - self.center_y) / \
+                (self.height / 2)
 
             # Inverte a velocidade da bola
             inv_vel = Vector(-1 * vx, vy)
