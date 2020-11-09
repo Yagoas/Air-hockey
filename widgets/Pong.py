@@ -3,11 +3,9 @@ from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from random import randint, choice
 from kivy.core.audio import SoundLoader
-# from kivy.core.window import Window
 
 
-# essas variáveis vão fazer com que no começo do jogo o disco saia para uma direção aleatória
-num = [-4, 4, ]
+num = [-4, 4, ]         # essas variáveis vão fazer com que no começo do jogo o disco saia para uma direção aleatória
 nx = choice(num)        # essa determina a direção e a velocidade da bola
 ny = randint(-3, 3)     # essa determina a inclinação
 
@@ -33,7 +31,6 @@ class Pong(Widget):
     def __init__(self, screen_manager=None):
         super(Pong, self).__init__()
         self.screen_manager = screen_manager
-        # Window.bind(on_keyboard=self.keyDown)
 
     # Põe a bola em jogo
     # aqui a var 'lado' vai servir para reconhecer onde a bola vai iniciar, dependendo de quem fez o último ponto
@@ -178,33 +175,6 @@ class Pong(Widget):
                 # Atualiza a posição da raquete direita
                 self.raquete_2.center_y = touch.y
                 self.raquete_2.center_x = touch.x
-
-    # Captura o movimento pelo teclado
-    def keyDown(self, a, b, keycode, *args):
-        # seta para cima
-        if keycode == 26:
-            self.raquete_1.center_y += 10
-        # seta para baixo
-        if keycode == 22:
-            self.raquete_1.center_y -= 10
-        # seta para direita
-        if keycode == 7:
-            self.raquete_1.center_x += 10
-        # seta para esquerda
-        if keycode == 4:
-            self.raquete_1.center_x -= 10
-        # d
-        if keycode == 79:
-            self.raquete_2.center_x += 10
-        # a
-        if keycode == 80:
-            self.raquete_2.center_x -= 10
-        # w
-        if keycode == 82:
-            self.raquete_2.center_y += 10
-        # s
-        if keycode == 81:
-            self.raquete_2.center_y -= 10
 
     def remove_btn(self, btn):
 
