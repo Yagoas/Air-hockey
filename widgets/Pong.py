@@ -162,16 +162,16 @@ class Pong(Widget):
     def on_touch_move(self, touch):
         # Verifica se toque foi do lado esquerdo da tela
         if touch.x < self.width / 2:
-            # impede que a raquete passe os limites superior e inferior
-            if touch.y - 90.0/2.0 > 60 and touch.y + 90.0/2.0 < self.height:
+            # impede que a raquete passe os limites superior, inferior e da lateral
+            if touch.y - 90.0/2.0 > 60 and touch.y + 90.0/2.0 < self.height and touch.x - 90/2. > self.x + 5:
                 # Atualiza a posição da raquete esquerda
                 self.raquete_1.center_y = touch.y
                 self.raquete_1.center_x = touch.x
 
         # Verifica se toque foi do lado direito da tela
         if touch.x > self.width - self.width / 2:
-            # impede que a raquete passe os limites superior e inferior
-            if touch.y - 90.0/2.0 > 60 and touch.y + 90.0/2.0 < self.height:
+            # impede que a raquete passe os limites superior, inferior e da lateral
+            if touch.y - 90.0/2.0 > 60 and touch.y + 90.0/2.0 < self.height and touch.x + 90/2. < self.width - 5:
                 # Atualiza a posição da raquete direita
                 self.raquete_2.center_y = touch.y
                 self.raquete_2.center_x = touch.x
