@@ -2,9 +2,8 @@ from kivy.properties import NumericProperty
 from kivy.uix.widget import Widget
 from kivy.vector import Vector
 from kivy.core.audio import SoundLoader
-
+import math
 # Define o elemento "raquete"
-
 
 class Raquete(Widget):
     """
@@ -14,36 +13,32 @@ class Raquete(Widget):
 
     # Cada raquete mantém seu placar
     placar = NumericProperty(0)
+  
+    # Carrega o som da colisão do disco com a raquete
+    sound_disco_raquete = SoundLoader.load("audio/sfx-disco_raquete.mp3")
 
     # Define a colisão da raquete com a bola
     def rebate_bola(self, bola):
 
-        # Carrega o som da colisão do disco com a raquete
-        sound_disco_raquete = SoundLoader.load("audio/sfx-disco_raquete.mp3")
+        dx = self.center_x - bola.center_x
+        dy = self.center_y - bola.center_y
+        distancia = math.hypot(dx, dy)
+        acc = 3
 
         # Verifica se houve a colisão do widget "raquete" com o widget "bola"
-        if self.collide_widget(bola):
-
+        if distancia < (self.width + bola.width)/2:
+            
             # Toca o áudio da colisão disco - raquete
-            if sound_disco_raquete:
-                sound_disco_raquete.play()
+            if self.sound_disco_raquete:
+                self.sound_disco_raquete.play()
+            
+            bola.velocidade = 0, 0
+            bx, by = bola.pos
+            rx, ry = self.pos
+            teste_x = (bx - rx)/(math.pi**2) + bx
+            teste_y = (by - ry)/(math.pi**2) + by
 
-            # Pega a tupla da velocidade da bola (velocidade_x e velocidade_y)
-            vx, vy = bola.velocidade
+            vetor_x = (bx - teste_x)*acc
+            vetor_y = (by - teste_y)*acc
 
-            # Verifica se a bola bateu na parte de cima ou de baixo da raquete
-            offset_raquete = (bola.center_y - self.center_y) / \
-                (self.height / 2)
-
-            # Inverte a velocidade da bola
-            inv_vel = Vector(-1 * vx, vy)
-
-            # Verifica a velocidade e define se aumenta ou conserva a velocidade da bola
-            if abs(vx + vy) <= 10:
-                vel = inv_vel * 1.2
-            else:
-                vel = inv_vel
-
-            # Seta a velocidade acelerada da bola, fazendo-a subir mais ou menos
-            # dependendo de onde tenha batido na raquete
-            bola.velocidade = vel.x, vel.y + (offset_raquete * 2)
+            bola.velocidade = (-vetor_x) , (-vetor_y) 
