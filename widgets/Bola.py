@@ -20,5 +20,5 @@ class Bola(Widget):
     # Define a função de movimento da nossa bolinha
     def movimenta(self):
         # Função para desacelerar com o tempo, tem que arrumar bugs com as paredes para ficar melhor
-        # self.velocidade = Vector(0.985 * self.velocidade_x, 0.985 * self.velocidade_y)
+        self.velocidade = Vector(0.985 * self.velocidade_x, 0.985 * self.velocidade_y)
         self.pos = Vector(*self.velocidade) + self.pos
