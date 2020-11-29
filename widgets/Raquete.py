@@ -19,9 +19,10 @@ class Raquete(Widget):
     sound_disco_raquete = SoundLoader.load("audio/sfx-disco_raquete.mp3")
 
     # Declara as variaveis que iremos usar para identificar a "força" na hora da batida
-    tx1 = None
-    ty1 = None
-    t1 = None
+    tx1 = 1
+    ty1 = 1
+    t1 = 1
+    acc = 1
 
     # Define a colisão da raquete com a bola
     def rebate_bola(self, bola):
@@ -61,15 +62,15 @@ class Raquete(Widget):
             if dt != 0:
                 # Limita a aceleração para poder acompanhar o movimento da bola em 5 e valor minio em .2
                 if (td/dt >= 2000):
-                    acc = 5
+                    self.acc = 5
                 elif (td/dt >= 400):
-                    acc = (td/dt)/400
+                    self.acc = (td/dt)/400
                 elif (td/dt >= 100):
-                    acc = (td/dt)/400
+                    self.acc = (td/dt)/400
                 elif (dt > 0.35):
-                    acc = 0
+                    self.acc = 0
                 else:
-                    acc = 0.2
+                    self.acc = 0.2
                 
                 # print("Aceleração: ", acc, "Velocidade", td/dt)
             
@@ -86,8 +87,8 @@ class Raquete(Widget):
             # Define um vetor resultante dados as posições e distancias no momento da colisão
                 razao_x = (-dx)/(math.pi**2) + bx
                 razao_y = (-dy)/(math.pi**2) + by
-                vetor_x = (bx - razao_x)*acc
-                vetor_y = (by - razao_y)*acc
+                vetor_x = (bx - razao_x)*self.acc
+                vetor_y = (by - razao_y)*self.acc
                 # print("Aceleração final: ", acc)
 
             # Seta a velcidade da bola resultante da colisão

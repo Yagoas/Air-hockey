@@ -3,6 +3,7 @@ from kivy.uix.widget import Widget
 from kivy.clock import Clock
 from random import randint, choice
 from kivy.core.audio import SoundLoader
+import math
 
 class Pong(Widget):
     """
@@ -69,15 +70,14 @@ class Pong(Widget):
             # versão com atrito
             self.bola.velocidade_y *= -1.015
 
-
-
         # Verifica se a bola atingiu as traves no lado esquerdo
         if self.bola.x < self.x and not self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
             self.bola.velocidade_x *= -1
             if self.sound_disco_parede:
                 self.sound_disco_parede.play()
 
-        if self.bola.x > self.width-self.bola.width and not self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
+        # Verifica se a bola atingiu as traves no lado direito
+        if self.bola.x > self.width-self.bola.width+1 and not self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
             self.bola.velocidade_x *= -1
             if self.sound_disco_parede:
                 self.sound_disco_parede.play()
@@ -105,7 +105,6 @@ class Pong(Widget):
                 self.screen_manager.current = "vencedor_2"
                 if self.sound_vitoria:
                     self.sound_vitoria.play()
-
                 return
 
             # Reinicia o jogo com a bola saindo pelo lado esquerdo
@@ -138,7 +137,6 @@ class Pong(Widget):
                 self.screen_manager.current = "vencedor_1"
                 if self.sound_vitoria:
                     self.sound_vitoria.play()
-
                 return
 
             # Reinicia o jogo com a bola saindo pelo lado direito
@@ -149,20 +147,20 @@ class Pong(Widget):
             self.raquete_2.x = self.width - 90
 
     # Captura o evento on_touch_move (arrastar de dedo na tela)
-    def on_touch_move(self, touch):
+    def on_touch_move(self, touch):       
         # Verifica se toque foi do lado esquerdo da tela
         # impede que a raquete passe os limites superior, inferior e da lateral
         if touch.x < self.width / 2 and (touch.y - 90.0/2.0 > 60 and touch.y + 90.0/2.0 < self.height and touch.x - 90/2. > self.x + 5):
-                # Atualiza a posição da raquete esquerda
-                self.raquete_1.center_y = touch.y
-                self.raquete_1.center_x = touch.x
+            # Atualiza a posição da raquete esquerda
+            self.raquete_1.center_y = touch.y
+            self.raquete_1.center_x = touch.x
 
         # Verifica se toque foi do lado direito da tela
         # impede que a raquete passe os limites superior, inferior e da lateral
-        if touch.x > self.width - self.width / 2 and (touch.y - 90.0/2.0 > 60 and touch.y + 90.0/2.0 < self.height and touch.x + 90/2. < self.width - 5):
-                # Atualiza a posição da raquete direita
-                self.raquete_2.center_y = touch.y
-                self.raquete_2.center_x = touch.x
+        if touch.x > self.width - self.width / 2 and (touch.y - 90.0/2.0 > 60 and touch.y + 90.0/2.0 < self.height and touch.x + 90/2. < self.width - 5):  
+            # Atualiza a posição da raquete direita
+            self.raquete_2.center_y = touch.y
+            self.raquete_2.center_x = touch.x
 
     def remove_btn(self, btn):
 
@@ -180,7 +178,7 @@ class Pong(Widget):
         self.raquete_1.x = self.x
         self.raquete_2.x = self.width - 90
 
-        # Agendamento da função "atualiza" a cada 1/120 = 0,008s
+        # Agendamento da função "atualiza" a cada 1/60 = 0,004s
         Clock.schedule_interval(self.atualiza, 1.0 / 60.0)
 
     def reinicia_jogo(self):
