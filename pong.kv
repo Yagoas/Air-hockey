@@ -10,14 +10,75 @@
             size: self.width, self.height
 
     Button:
-        size_hint: 0.322, 0.150
-        center_x: root.center_x - 180
-        center_y: root.center_y - 275
+        pos_hint: {"x":.1, "top":.2}
+        size_hint: 0.3, 0.15
         background_normal: 'img/iniciar-btn-normal.png'
         background_down: 'img/iniciar-btn-pressed.png'
         on_release:
             root.manager.transition.direction = 'left'
+            root.manager.current = 'modos'
+
+    Button:
+        pos_hint: {"x":.6, "top":.2}
+        size_hint: 0.3, 0.15
+        background_normal: 'img/options-btn-normal.jpeg'
+        background_down: 'img/options-btn-pressed.jpeg'
+        on_release:
+            root.manager.transition.direction = 'left'
+            root.manager.current = 'opt'
+
+<TelaModos>:
+    canvas:
+        Rectangle:
+            source: 'img/tela-modos-bg.jpeg'
+            size: self.width, self.height
+
+    Button:
+        pos_hint: {"x":.35, "top":.7}
+        size_hint: 0.3, 0.15
+        background_normal: 'img/real-btn-normal.jpeg'
+        background_down: 'img/real-btn-pressed.jpeg'
+        on_release:
+            root.manager.transition.direction = 'left'
             root.manager.current = 'jogo'
+
+    Button:
+        pos_hint: {"x":.35, "top":.4}
+        size_hint: 0.3, 0.15
+        background_normal: 'img/hard-btn-normal.jpeg'
+        background_down: 'img/hard-btn-pressed.jpeg'
+        on_release:
+            root.manager.transition.direction = 'left'
+            root.manager.current = 'jogo-hard'
+
+<TelaOpt>:
+    canvas:
+        Rectangle:
+            source: 'img/tela-opcoes-bg.jpeg'
+            size: self.width, self.height
+
+    Button:
+        pos_hint: {"x":.35, "top":.7}
+        size_hint: 0.3, 0.15
+        background_normal: 'img/musica-btn-normal.jpeg'
+        background_down: 'img/musica-btn-pressed.jpeg'
+        on_release:
+
+    Button:
+        pos_hint: {"x":.35, "top":.5}
+        size_hint: 0.3, 0.15
+        background_normal: 'img/efeitos-btn-normal.jpeg'
+        background_down: 'img/efeitos-btn-pressed.jpeg'
+        on_release:
+
+    Button:
+        pos_hint: {"x":.35, "top":.3}
+        size_hint: 0.3, 0.15
+    	background_normal: 'img/menu-btn-normal.png'
+        background_down: 'img/menu-btn-pressed.png'
+        on_release:
+            root.manager.transition.direction = 'right'
+            root.manager.current = 'menu'
 
 <Bola>:
     size: 50, 50
@@ -92,7 +153,7 @@
     Button:
         id: inicia_jogo_btn
         size: 180, 45
-	    pos: root.width/6, 6 
+        pos: root.width/6, 6 
 	    background_normal: 'img/iniciar-jogo-btn-normal.png'
 	    background_down: 'img/iniciar-jogo-btn-pressed.png'
         center_x: root.width/6
@@ -124,9 +185,10 @@
             root.screen_manager.current = "menu"
             root.servico(vel=(0, 0))
             root.raquete_1.placar = 0  # essa linha e a de baixo fazem o placar zerar
-            root.raquete_2.placar = 0  # no original o placar continuava, mesmo depois de voltar pra tela inicial
+            root.raquete_2.placar = 0
 
 <TelaJogo>:
+
 <TelaVencedor1>:
     canvas:
         Rectangle:

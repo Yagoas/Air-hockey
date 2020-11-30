@@ -40,6 +40,8 @@ class PongApp(App):
         # Adiciona as telas ao nosso gerenciador
         screen_manager.add_widget(TelaMenu(name='menu'))
         screen_manager.add_widget(tela_jogo)
+        screen_manager.add_widget(TelaModos(name='modos'))
+        screen_manager.add_widget(TelaOpt(name='opt'))
         screen_manager.add_widget(TelaVencedor1(name='vencedor_1'))
         screen_manager.add_widget(TelaVencedor2(name='vencedor_2'))
 
