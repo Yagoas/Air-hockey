@@ -25,7 +25,7 @@ class Raquete(Widget):
     acc = 1
 
    # Define a colisão da raquete com a bola sem variação da "força" de impacto (modo hard)
-    def rebate_bola(self, bola):
+    def rebate_bola(self, bola, efeitos):
 
         # Calculo das distâncias entre os widgets para definir se houve colisão
         dx = self.center_x - bola.center_x
@@ -36,7 +36,7 @@ class Raquete(Widget):
         if distancia <= (self.width + bola.width)/2:
             
             # Toca o áudio da colisão disco - raquete
-            if self.sound_disco_raquete:
+            if self.sound_disco_raquete and efeitos == 1:
                 self.sound_disco_raquete.play()
             
             # Seta velocidade da bola em 0
@@ -59,7 +59,7 @@ class Raquete(Widget):
             bola.velocidade = (-vetor_x) , (-vetor_y) 
 
     # Define a colisão da raquete com a bola considerando a "força" do impacto (modo real)
-    def rebate_bola_impacto(self, bola):
+    def rebate_bola_impacto(self, bola, efeitos):
 
         # Calculo das distâncias entre os widgets para definir se houve colisão
         dx = self.center_x - bola.center_x
@@ -76,7 +76,7 @@ class Raquete(Widget):
         if distancia <= (self.width + bola.width)/2:
             
             # Toca o áudio da colisão disco - raquete
-            if self.sound_disco_raquete:
+            if self.sound_disco_raquete and efeitos == 1:
                 self.sound_disco_raquete.play()
 
             # Atribuição da pos no momento da colisão

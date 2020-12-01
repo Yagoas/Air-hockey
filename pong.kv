@@ -69,11 +69,12 @@
         background_down: 'img/musica-btn-pressed.jpeg'
         aux: ''
         on_press:
+            # Altera o botão e define se toca ou para a música
             musica.aux = musica.background_normal
             musica.background_normal = musica.background_down
             musica.background_down = musica.aux
-            #if(musica.aux != 'img/musica-btn-normal.jpeg'): root.carrega_som() 
-            # tentando adaptar o som para a escolha do user
+            if musica.background_normal == 'img/musica-btn-pressed.jpeg': app.Stop()
+            if musica.background_normal == 'img/musica-btn-normal.jpeg': app.Play()
 
     Button:
         id: efeitos
@@ -83,15 +84,18 @@
         background_down: 'img/efeitos-btn-pressed.jpeg'
         aux: ''
         on_press:
+            # Altera o botão e define se tem efeitos sonoros
             efeitos.aux = efeitos.background_normal
             efeitos.background_normal = efeitos.background_down
             efeitos.background_down = efeitos.aux
+            if (efeitos.background_normal == 'img/efeitos-btn-normal.jpeg'): app.efeitos = 1
+            else: app.efeitos = (0)
 
     Button:
         pos_hint: {"x":.35, "top":.3}
         size_hint: 0.3, 0.15
-    	background_normal: 'img/menu-btn-normal.png'
-        background_down: 'img/menu-btn-pressed.png'
+    	background_normal: 'img/menu2-btn-normal.jpg'
+        background_down: 'img/menu2-btn-pressed.jpg'
         on_release:
             root.manager.transition.direction = 'right'
             root.manager.current = 'menu'
@@ -153,7 +157,7 @@
 
     Bola:
         id: bola
-        center_y: root.center_y*3  # nova posição para o novo campo; o mesmo para as raquetes
+        center_y: root.center_y + 25  # nova posição para o novo campo; o mesmo para as raquetes
 	    center_x: root.center_x
 
     Raquete:
@@ -175,7 +179,9 @@
         background_down: 'img/iniciar-jogo-btn-pressed.png'
         aux: 'img/reiniciar-btn-normal.png'
         on_release:
+            # Declara o modo de jogo e declara as opções de efeitos sonoros
             root.modo_jogo(app.modo)
+            root.efeitos_campo(app.efeitos)
             if (start_btn.background_normal != start_btn.aux): root.comeca_jogo()
             else: root.reinicia_jogo()
             start_btn.background_normal = start_btn.aux

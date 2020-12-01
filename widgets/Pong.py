@@ -15,14 +15,14 @@ class Pong(Widget):
     # diminuí um pouco o tamanho do gol pq ainda estava um pouco fora de lugar
     tamanho_do_gol = 220
 
-
-
-
+    # Variaveis para verificar o modo de jogo e as opções de som
     modo = 0
+    efeitos = 1
 
-
-
-
+    # Carrega os efeitos sonoros
+    sound_gol = SoundLoader.load("audio/sfx-gol.mp3")
+    sound_vitoria = SoundLoader.load("audio/sfx-vitoria.mp3")
+    sound_disco_parede = SoundLoader.load("audio/sfx-disco_parade.mp3")
 
     # Referencia o objeto Bola definido no nosso arquivo .kv
     bola = ObjectProperty(None)
@@ -31,26 +31,19 @@ class Pong(Widget):
     raquete_1 = ObjectProperty(None)
     raquete_2 = ObjectProperty(None)
 
-    # Carrega os sons do jogo
-    sound_gol = SoundLoader.load("audio/sfx-gol.mp3")
-    sound_disco_parede = SoundLoader.load("audio/sfx-disco_parade.mp3")
-    sound_vitoria = SoundLoader.load("audio/sfx-vitoria.mp3")
-
     def __init__(self, screen_manager=None):
         super(Pong, self).__init__()
         self.screen_manager = screen_manager
-
-    def carrega_som(self):
-        # Carrega os sons do jogo
-        sound_gol = SoundLoader.load("audio/sfx-gol.mp3")
-        sound_disco_parede = SoundLoader.load("audio/sfx-disco_parade.mp3")
-        sound_vitoria = SoundLoader.load("audio/sfx-vitoria.mp3")
 
     # Define o modo de jogo a ser iniciado
     def modo_jogo (self, tipo):
         if tipo == 1: self.modo = 1
         elif tipo == 2: self.modo = 2
-        print(self.modo)
+
+    # Define se havera som no jogo
+    def efeitos_campo (self, estado):
+        if estado == 1: self.efeitos = 1
+        elif estado == 0: self.efeitos = 0
 
     # Coloca a bola em jogo
     # aqui a var 'lado' vai servir para reconhecer onde a bola vai iniciar, dependendo de quem fez o último ponto
@@ -77,27 +70,28 @@ class Pong(Widget):
             self.bola.movimenta_atrito()
 
              # Rebate a bola caso haja colisão com a bolinha
-            self.raquete_1.rebate_bola_impacto(self.bola)
-            self.raquete_2.rebate_bola_impacto(self.bola)
+            self.raquete_1.rebate_bola_impacto(self.bola, self.efeitos)
+            self.raquete_2.rebate_bola_impacto(self.bola, self.efeitos)
 
         elif self.modo == 2:
             # Faz a bola se mover (modo hard)
             self.bola.movimenta()
 
             # Rebate a bola caso haja colisão com a bolinha
-            self.raquete_1.rebate_bola(self.bola)
-            self.raquete_2.rebate_bola(self.bola)
+            self.raquete_1.rebate_bola(self.bola, self.efeitos)
+            self.raquete_2.rebate_bola(self.bola, self.efeitos)
 
         # Verifica se a bola atingiu a parte de baixo ou de cima do campo
         if (self.bola.y < 60) or (self.bola.top > self.height):
+    
             # Toca o áudio da colisão disco - parede
-            if self.sound_disco_parede:
+            if self.sound_disco_parede and self.efeitos == 1:
                 self.sound_disco_parede.play()
 
             # Inverte a velocidade da bola caso colida com a parede
             if self.modo == 1:
                 # Modo normal
-               self.bola.velocidade_y *= -1.01
+               self.bola.velocidade_y *= -1.015
 
             elif self.modo == 2:
                 # Modo hard
@@ -106,13 +100,13 @@ class Pong(Widget):
         # Verifica se a bola atingiu as traves no lado esquerdo
         if self.bola.x < self.x and not self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
             self.bola.velocidade_x *= -1
-            if self.sound_disco_parede:
+            if self.sound_disco_parede and self.efeitos == 1:
                 self.sound_disco_parede.play()
 
         # Verifica se a bola atingiu as traves no lado direito
         if self.bola.x > self.width-self.bola.width+1 and not self.tamanho_do_gol < self.bola.y < (self.height + self.tamanho_do_gol)/2:
             self.bola.velocidade_x *= -1
-            if self.sound_disco_parede:
+            if self.sound_disco_parede and self.efeitos == 1:
                 self.sound_disco_parede.play()
 
         # Verifica se colidiu com o gol esquerdo  para atualizar o
@@ -122,7 +116,7 @@ class Pong(Widget):
             self.raquete_2.placar += 1
 
             # Toca o áudio do gol
-            if self.sound_gol:
+            if self.sound_gol and self.efeitos == 1:
                 self.sound_gol.play()
 
             if self.raquete_2.placar >= 5:
@@ -136,7 +130,7 @@ class Pong(Widget):
                 self.raquete_1.x = self.x
                 self.raquete_2.x = self.width - 90
                 self.screen_manager.current = "vencedor_2"
-                if self.sound_vitoria:
+                if self.sound_vitoria and self.efeitos == 1:
                     self.sound_vitoria.play()
                 return
 
@@ -155,7 +149,7 @@ class Pong(Widget):
             self.raquete_1.placar += 1
 
             # Toca o áudio do gol
-            if self.sound_gol:
+            if self.sound_gol and self.efeitos == 1:
                 self.sound_gol.play()
 
             if self.raquete_1.placar >= 5:
@@ -168,7 +162,7 @@ class Pong(Widget):
                 self.raquete_1.x = self.x
                 self.raquete_2.x = self.width - 90
                 self.screen_manager.current = "vencedor_1"
-                if self.sound_vitoria:
+                if self.sound_vitoria and self.efeitos == 1:
                     self.sound_vitoria.play()
                 return
 
@@ -208,8 +202,10 @@ class Pong(Widget):
 
         # Posiciona a bola fora do campo e zera sua velocidade
         self.bola.velocidade = (0,0)
-        self.bola.center_y = self.center_y*3
+        self.bola.center_y = self.center_y + 25
         self.bola.center_x = self.center_x
+
+        self.modo = 0
 
     def comeca_jogo(self):
         # Coloca a bola em jogo

@@ -1,6 +1,5 @@
 from kivy.uix.screenmanager import Screen
 
-
 # Declara o Menu do Jogo
 class TelaMenu(Screen):
     pass

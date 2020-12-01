@@ -18,16 +18,24 @@ Config.read("config.ini")
 screen_manager = ScreenManager()
 
 class PongApp(App):
-    #Guarda a informação do modo de jogo
+    # Variaveis para verificar o modo de jogo e as opções de som
     modo = 0
+    efeitos = 1
+
+    # Carrega o áudio
+    sound = SoundLoader.load('audio/bg-music.mp3')
+
+    # Pausa música
+    def Stop(self):
+        self.sound.stop()
+
+    # Toca música
+    def Play(self):
+        if self.sound:
+            self.sound.play()
 
     def build(self):
-        # Carrega o áudio
-        sound = SoundLoader.load('audio/bg-music.mp3')
-
-        # Verifica se houve o carregamento do nosso áudio e coloca para tocar
-        if sound:
-            sound.play()
+        self.Play()
 
         # Objeto do nosso jogo
         pong = Pong(screen_manager=screen_manager)
