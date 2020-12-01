@@ -18,9 +18,10 @@ Config.read("config.ini")
 screen_manager = ScreenManager()
 
 class PongApp(App):
+    #Guarda a informação do modo de jogo
+    modo = 0
 
     def build(self):
-
         # Carrega o áudio
         sound = SoundLoader.load('audio/bg-music.mp3')
 
@@ -44,7 +45,6 @@ class PongApp(App):
         screen_manager.add_widget(TelaOpt(name='opt'))
         screen_manager.add_widget(TelaVencedor1(name='vencedor_1'))
         screen_manager.add_widget(TelaVencedor2(name='vencedor_2'))
-
         return screen_manager
 
 if __name__ == '__main__':

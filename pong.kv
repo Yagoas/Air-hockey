@@ -14,7 +14,7 @@
         size_hint: 0.3, 0.15
         background_normal: 'img/iniciar-btn-normal.png'
         background_down: 'img/iniciar-btn-pressed.png'
-        on_release:
+        on_press:
             root.manager.transition.direction = 'left'
             root.manager.current = 'modos'
 
@@ -23,22 +23,25 @@
         size_hint: 0.3, 0.15
         background_normal: 'img/options-btn-normal.jpeg'
         background_down: 'img/options-btn-pressed.jpeg'
-        on_release:
+        on_press:
             root.manager.transition.direction = 'left'
             root.manager.current = 'opt'
 
 <TelaModos>:
+    id: modos
+    modo: 0
     canvas:
         Rectangle:
             source: 'img/tela-modos-bg.jpeg'
             size: self.width, self.height
 
     Button:
-        pos_hint: {"x":.35, "top":.7}
+        pos_hint: {'x':.35, 'top':.7}
         size_hint: 0.3, 0.15
         background_normal: 'img/real-btn-normal.jpeg'
         background_down: 'img/real-btn-pressed.jpeg'
-        on_release:
+        on_press:
+            app.modo = 1
             root.manager.transition.direction = 'left'
             root.manager.current = 'jogo'
 
@@ -47,9 +50,10 @@
         size_hint: 0.3, 0.15
         background_normal: 'img/hard-btn-normal.jpeg'
         background_down: 'img/hard-btn-pressed.jpeg'
-        on_release:
+        on_press:
+            app.modo = 2
             root.manager.transition.direction = 'left'
-            root.manager.current = 'jogo-hard'
+            root.manager.current = 'jogo'      
 
 <TelaOpt>:
     canvas:
@@ -58,18 +62,30 @@
             size: self.width, self.height
 
     Button:
+        id: musica
         pos_hint: {"x":.35, "top":.7}
         size_hint: 0.3, 0.15
         background_normal: 'img/musica-btn-normal.jpeg'
         background_down: 'img/musica-btn-pressed.jpeg'
-        on_release:
+        aux: ''
+        on_press:
+            musica.aux = musica.background_normal
+            musica.background_normal = musica.background_down
+            musica.background_down = musica.aux
+            #if(musica.aux != 'img/musica-btn-normal.jpeg'): root.carrega_som() 
+            # tentando adaptar o som para a escolha do user
 
     Button:
+        id: efeitos
         pos_hint: {"x":.35, "top":.5}
         size_hint: 0.3, 0.15
         background_normal: 'img/efeitos-btn-normal.jpeg'
         background_down: 'img/efeitos-btn-pressed.jpeg'
-        on_release:
+        aux: ''
+        on_press:
+            efeitos.aux = efeitos.background_normal
+            efeitos.background_normal = efeitos.background_down
+            efeitos.background_down = efeitos.aux
 
     Button:
         pos_hint: {"x":.35, "top":.3}
@@ -81,7 +97,7 @@
             root.manager.current = 'menu'
 
 <Bola>:
-    size: 50, 50
+    size: "50sp", "50sp"
     canvas:
         Ellipse:
             source: 'img/bola.png'
@@ -97,6 +113,7 @@
             size:self.size
 
 <Pong>:
+    id: jogo
     bola: bola
     raquete_1: raquete_esquerda
     raquete_2: raquete_direita
@@ -123,20 +140,20 @@
     Label:
         font_size: 50
         center_x: root.width/4
-        top: root.top + 12
+        top: root.top
         text: str(root.raquete_1.placar)
         color: (1,1,1,1)	# deixa na cor branca
 
     Label:
         font_size: 50
         center_x: root.width * 3/4
-        top: root.top + 12
+        top: root.top
         text: str(root.raquete_2.placar)
         color: (1,1,1,1)
 
     Bola:
         id: bola
-        center_y: root.center_y + 25  # nova posição para o novo campo; o mesmo para as raquetes
+        center_y: root.center_y*3  # nova posição para o novo campo; o mesmo para as raquetes
 	    center_x: root.center_x
 
     Raquete:
@@ -151,41 +168,31 @@
         center_y: root.center_y + 25
 
     Button:
-        id: inicia_jogo_btn
+        id: start_btn
         size: 180, 45
-        pos: root.width/6, 6 
-	    background_normal: 'img/iniciar-jogo-btn-normal.png'
-	    background_down: 'img/iniciar-jogo-btn-pressed.png'
-        center_x: root.width/6
+	    pos: root.width/6, 6
+        background_normal: 'img/iniciar-jogo-btn-normal.png'
+        background_down: 'img/iniciar-jogo-btn-pressed.png'
+        aux: 'img/reiniciar-btn-normal.png'
         on_release:
-            root.remove_btn(self)
-            root.comeca_jogo()
-            reinicia_jogo_btn.center_x = 1 * root.width/4
-            menu_btn.center_x = 3 * root.width/4
-
-    Button:
-        id: reinicia_jogo_btn
-        size: 180, 45
-	    pos: 3 * root.width/6, 6
-    	background_normal: 'img/reiniciar-btn-normal.png'
-        background_down: 'img/reiniciar-btn-pressed.png'
-        center_x: 3 * root.width/6
-        on_press:
-            root.reinicia_jogo()
+            root.modo_jogo(app.modo)
+            if (start_btn.background_normal != start_btn.aux): root.comeca_jogo()
+            else: root.reinicia_jogo()
+            start_btn.background_normal = start_btn.aux
+            start_btn.background_down = 'img/reiniciar-btn-pressed.png'
 
     Button:
         id: menu_btn
         size: 180, 45
-	    pos: 5 * root.width/6, 6
+	    pos: root.width * 2/3, 6
     	background_normal: 'img/menu-btn-normal.png'
         background_down: 'img/menu-btn-pressed.png'
-        center_x: 5 * root.width/6
+
         on_press:
+            root.reseta()
+            start_btn.background_normal = 'img/iniciar-jogo-btn-normal.png'
             root.screen_manager.transition.direction = "right"
             root.screen_manager.current = "menu"
-            root.servico(vel=(0, 0))
-            root.raquete_1.placar = 0  # essa linha e a de baixo fazem o placar zerar
-            root.raquete_2.placar = 0
 
 <TelaJogo>:
 
